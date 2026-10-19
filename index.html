@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0B0B0B">
+  <title>Pendaftaran Anggota SENPAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      color-scheme:dark;
+      /* === PALET BLACK & GOLD (ubah warna di sini) === */
+      --black:#0B0B0B; --surface:#141414; --charcoal:#1D1D1D; --field:#101010;
+      --gold:#FFD700; --gold-bright:#FFE766; --gold-metal:#D4AF37; --gold-dark:#8C6500;
+      --ink:#F5F3EC; --muted:#A6A6A6; --line:#333333;
+      --line-gold:rgba(212,175,55,.28); --gold-soft:rgba(212,175,55,.09);
+      --gold-grad:linear-gradient(135deg,#FFF176 0%,#FFD700 35%,#D4AF37 65%,#8C6500 100%);
+      --btn-grad:linear-gradient(135deg,#FFE766 0%,#FFD700 38%,#D4AF37 72%,#BE9524 100%);
+      --ok:#4ADE80; --ok-bg:rgba(46,160,100,.16);
+      --err:#FF8A80; --err-bg:rgba(220,60,50,.14); --err-line:rgba(255,138,128,.4);
+    }
+    *{box-sizing:border-box;margin:0}
+    html{-webkit-text-size-adjust:100%}
+    body{font-family:'Inter',system-ui,sans-serif;background:var(--black);background-image:radial-gradient(900px 420px at 85% -8%,rgba(212,175,55,.09),transparent 65%);background-repeat:no-repeat;color:var(--ink);line-height:1.55;min-height:100vh;overflow-x:hidden}
+    h1,h2,.brand{font-family:'Sora','Inter',sans-serif}
+    .wrap{width:100%;max-width:1040px;margin:0 auto;padding:0 20px}
+
+    /* Header */
+    header{background:var(--black);color:var(--ink);border-bottom:1px solid var(--line-gold)}
+    header .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:60px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem;letter-spacing:.14em;color:var(--ink)}
+    /* Logo SENPAI (gambar) */
+    .brand-logo{width:48px;height:48px;object-fit:contain;flex:none;display:block}
+    @media(max-width:480px){
+      .brand-logo{width:40px;height:40px}
+      .brand{gap:8px;font-size:1.1rem}
+    }
+    .badge{font-size:.75rem;font-weight:500;padding:4px 12px;border:1px solid var(--gold-metal);border-radius:999px;color:var(--gold-bright);white-space:nowrap}
+
+    /* Layout */
+    main{padding:28px 0 48px}
+    .grid{display:grid;gap:28px;grid-template-columns:1fr}
+    @media(min-width:900px){
+      main{padding:56px 0 72px}
+      .grid{grid-template-columns:1fr 440px;gap:64px;align-items:start}
+    }
+
+    /* Hero */
+    h1{font-size:clamp(1.75rem,5.2vw,2.6rem);line-height:1.15;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+    .gold-text{color:var(--gold-metal);background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .lead{margin-top:12px;color:var(--muted);max-width:46ch}
+    .steps{margin-top:24px;list-style:none;padding:0;display:grid;gap:0;max-width:46ch}
+    .steps li{display:grid;grid-template-columns:32px 1fr;gap:14px;position:relative;padding-bottom:18px}
+    .steps li:last-child{padding-bottom:0}
+    .steps li:not(:last-child)::before{content:"";position:absolute;left:15px;top:32px;bottom:0;width:1px;background:var(--line-gold)}
+    .steps b{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--btn-grad);color:var(--black);font:700 .85rem 'Sora',sans-serif}
+    .steps strong{display:block;font-weight:600;font-size:.95rem;color:var(--ink)}
+    .steps span{color:var(--muted);font-size:.875rem}
+    .hero-extra{display:none}
+    @media(min-width:900px){.hero-extra{display:block}}
+    @media(max-width:899px){.steps{display:none}.lead{margin-top:8px}}
+
+    /* Card */
+    .card{background:var(--charcoal);border:1px solid var(--line-gold);border-radius:14px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+    @media(min-width:480px){.card{padding:32px}}
+    .card h2{font-size:1.15rem;color:var(--ink)}
+    .card .sub{color:var(--muted);font-size:.875rem;margin:2px 0 20px}
+    .field{margin-bottom:18px}
+    label,.lbl{display:block;font-size:.875rem;font-weight:600;margin-bottom:6px;color:var(--ink)}
+    .hint{font-size:.78rem;color:var(--muted);margin-top:6px}
+    input[type=text],select{width:100%;height:48px;padding:0 14px;font:inherit;font-size:1rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:10px;transition:border-color .15s,box-shadow .15s}
+    select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+    select option{background:var(--charcoal);color:var(--ink)}
+    input::placeholder{color:#8A8A8A}
+    input:-webkit-autofill{-webkit-text-fill-color:var(--ink);box-shadow:0 0 0 100px var(--field) inset;caret-color:var(--ink)}
+    input:focus,select:focus{outline:none;border-color:var(--gold-metal);box-shadow:0 0 0 3px rgba(212,175,55,.18)}
+    .invalid input,.invalid select,.invalid .drop{border-color:var(--err)}
+    .invalid input:focus,.invalid select:focus{box-shadow:0 0 0 3px rgba(255,138,128,.18)}
+    .err{display:none;color:var(--err);font-size:.8rem;margin-top:6px}
+    .invalid .err{display:block}
+
+    /* Upload */
+    .drop{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:22px 16px;border:1.5px dashed var(--gold-dark);border-radius:12px;background:var(--surface);cursor:pointer;transition:border-color .15s,background .15s}
+    .drop:hover,.drop.over,.drop:focus-within{border-color:var(--gold-metal);background:var(--gold-soft)}
+    .drop svg{width:28px;height:28px;color:var(--gold)}
+    .drop strong{font-size:.9rem;font-weight:600;color:var(--ink)}
+    .drop span{font-size:.78rem;color:var(--muted)}
+    .drop input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+    .preview{display:none;align-items:center;gap:12px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+    .preview img{width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--line);flex:none}
+    .preview .meta{min-width:0;flex:1}
+    .preview .name{font-size:.875rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+    .preview .size{font-size:.78rem;color:var(--muted)}
+    .link-btn{background:none;border:0;color:var(--gold-metal);font:inherit;font-size:.85rem;font-weight:600;cursor:pointer;padding:8px;border-radius:8px}
+    .link-btn:hover{background:var(--gold-soft);color:var(--gold-bright)}
+    .has-file .drop{display:none}
+    .has-file .preview{display:flex}
+
+    /* Alert & button */
+    .alert{display:none;gap:10px;padding:12px 14px;border-radius:10px;font-size:.875rem;margin-bottom:16px}
+    .alert.show{display:flex}
+    .alert.error{background:var(--err-bg);color:var(--err);border:1px solid var(--err-line)}
+    .alert svg{width:18px;height:18px;flex:none;margin-top:2px}
+    .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:50px;padding:0 20px;border:0;border-radius:10px;background:var(--btn-grad);background-size:160% 100%;background-position:0 0;color:var(--black);font:700 1rem 'Inter',sans-serif;cursor:pointer;text-decoration:none;transition:background-position .3s,box-shadow .2s,transform .1s}
+    .btn:hover{background-position:100% 0;box-shadow:0 4px 16px rgba(212,175,55,.22)}
+    .btn:active{transform:scale(.99)}
+    .btn:focus-visible,.link-btn:focus-visible{outline:3px solid rgba(255,215,0,.45);outline-offset:2px}
+    .btn[disabled]{background:#3A3A3A;color:#9A9A9A;box-shadow:none;cursor:progress}
+    .btn.wa{background:#1B7F4B;color:#fff}
+    .btn.wa:hover{background:#166a3e;box-shadow:none}
+    .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-gold);margin-top:10px}
+    .btn.ghost:hover{background:var(--gold-soft);border-color:var(--gold-metal);box-shadow:none}
+    .spin{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,.25);border-top-color:var(--gold);border-radius:50%;animation:sp .7s linear infinite}
+    .loading .spin{display:block}
+    @keyframes sp{to{transform:rotate(360deg)}}
+    .foot{text-align:center;font-size:.78rem;color:var(--muted);margin-top:14px}
+
+    /* Sukses */
+    #success{display:none;text-align:center}
+    .done #success{display:block;animation:pop .3s ease-out}
+    .done #formArea{display:none}
+    .tick{width:56px;height:56px;border-radius:50%;background:var(--ok-bg);color:var(--ok);display:grid;place-items:center;margin:0 auto 14px}
+    .tick svg{width:28px;height:28px}
+    #success h2{margin-bottom:6px}
+    #success p{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+    .note{text-align:left;background:var(--gold-soft);border:1px solid var(--line-gold);border-radius:10px;padding:12px 14px;font-size:.85rem;margin-bottom:16px;color:var(--ink)}
+    @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <img id="logoSenpai" class="brand-logo" alt="Logo SENPAI" width="48" height="48" decoding="async">
+        SENPAI
+      </div>
+      <span class="badge">Situs Clan SENPAI</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap grid">
+      <section>
+        <h1>Join Grup Clan <span class="gold-text">SENPAI</span></h1>
+        <p class="lead">Isi ID wibuku, pilih role, dan unggah screenshot profil Wibuku kamu. Data tersimpan otomatis, lalu admin kaii menerimamu lewat WhatsApp.</p>
+        <ol class="steps hero-extra">
+          <li><b>1</b><div><strong>Isi formulir</strong><span>ID Wibuku, role, dan screenshot profil Wibuku.</span></div></li>
+          <li><b>2</b><div><strong>Data tersimpan</strong><span>Setiap ID hanya bisa mendaftar satu kali.</span></div></li>
+          <li><b>3</b><div><strong>Lanjut ke WhatsApp admin</strong><span>Lampirkan screenshot di chat untuk diverifikasi.</span></div></li>
+        </ol>
+      </section>
+
+      <section class="card" id="card">
+        <div id="formArea">
+          <h2>Lengkapi Data Sebelum Join</h2>
+          <p class="sub">Semua kolom wajib diisi.</p>
+
+          <div class="alert error" id="alert" role="alert" aria-live="assertive">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.500v.01"/></svg>
+            <span id="alertText"></span>
+          </div>
+
+          <form id="rekrutmenForm" novalidate>
+            <div class="field" id="f-id">
+              <label for="id">ID Wibuku</label>
+              <input type="text" id="id" name="id" placeholder="Contoh: 2826702" autocomplete="off" inputmode="text" maxlength="30">
+              <div class="err" id="e-id">Gunakan 3-30 karakter: huruf, angka, _ atau -.</div>
+            </div>
+
+            <div class="field" id="f-role">
+              <label for="role">Role</label>
+              <select id="role" name="role">
+                <option value="" disabled selected>Pilih role kamu</option>
+                <option value="admiral">admiral</option>
+                <option value="officer">officer</option>
+                <option value="member">member</option>
+              </select>
+              <div class="err" id="e-role">Pilih salah satu role.</div>
+            </div>
+
+            <div class="field" id="f-foto">
+              <span class="lbl">Screenshot profil Wibuku</span>
+              <label class="drop" id="drop" for="foto">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V5m0 0-4 4m4-4 4 4M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+                <strong>Pilih atau tarik gambar ke sini</strong>
+                <span>JPG, PNG, GIF, atau WebP. Maksimal 2 MB.</span>
+                <input type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/gif,image/webp">
+              </label>
+              <div class="preview" id="preview">
+                <img id="thumb" alt="Pratinjau screenshot">
+                <div class="meta"><div class="name" id="fname"></div><div class="size" id="fsize"></div></div>
+                <button type="button" class="link-btn" id="ganti">Ganti</button>
+              </div>
+              <div class="err" id="e-foto"></div>
+            </div>
+
+            <button type="submit" class="btn" id="btnSubmit">
+              <span class="spin" aria-hidden="true"></span>
+              <span id="btnText">Kirim pendaftaran</span>
+            </button>
+            <p class="foot">Setelah terkirim, kamu diarahkan ke WhatsApp admin kaii.</p>
+          </form>
+        </div>
+
+        <div id="success" role="status" aria-live="polite">
+          <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.500" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg></div>
+          <h2>Pendaftaran tersimpan</h2>
+          <p>Data kamu sudah masuk. Satu langkah lagi untuk bergabung.</p>
+          <div class="note">Di WhatsApp, lampirkan sendiri screenshot profil Wibuku kamu pada chat ke admin kaii.</div>
+          <a class="btn wa" id="waBtn" href="#" target="_blank" rel="noopener">JOIN GRUP CHAT</a>
+          <button type="button" class="btn ghost" id="again">Daftarkan ID lain</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Logo: dibaca dari file logo.js (isi LOGO_URL). Lihat petunjuk di logo.js -->
+  <script src="logo.js"></script>
+  <script>
+    (function () {
+      var img = document.getElementById('logoSenpai');
+      if (!img) return;
+      img.onerror = function () { img.style.display = 'none'; };
+      if (typeof LOGO_URL === 'string' && LOGO_URL) { img.src = LOGO_URL; }
+      else { img.style.display = 'none'; }
+    })();
+  </script>
+
+  <script>
+    (function () {
+      /* ============================================================
+         PENGATURAN — satu-satunya bagian yang perlu kamu ganti.
+         Isi dengan URL Web App Apps Script (berakhiran /exec).
+         URL ini bukan rahasia pribadi; tidak ada token/kata sandi di sini.
+         ============================================================ */
+      var API_URL = 'https://script.google.com/macros/s/AKfycbw0896Aax8GYkvLkEjYJOT4hpb5ed3XqZn0cwE1OUG6z_cw8DmELzYL6abnrps4QTFQZw/exec';
+      var TIMEOUT_MS = 90000; // batas tunggu 90 detik
+
+      var MAX = 2 * 1024 * 1024;
+      var TIPE = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      var $ = function (i) { return document.getElementById(i); };
+      var card = $('card'), form = $('rekrutmenForm'), btn = $('btnSubmit'), btnText = $('btnText');
+      var inId = $('id'), inRole = $('role'), inFoto = $('foto');
+      var sending = false, previewUrl = null;
+
+      function setErr(field, msg) {
+        var box = $('f-' + field);
+        if (msg) {
+          box.classList.add('invalid');
+          var e = $('e-' + field); if (msg !== true) e.textContent = msg;
+        } else { box.classList.remove('invalid'); }
+      }
+      function showAlert(msg) { $('alertText').textContent = msg; $('alert').classList.add('show'); }
+      function hideAlert() { $('alert').classList.remove('show'); }
+      function fmt(b) { return b < 1048576 ? Math.max(1, Math.round(b / 1024)) + ' KB' : (b / 1048576).toFixed(2) + ' MB'; }
+
+      function checkId() {
+        var ok = /^[a-zA-Z0-9_-]{3,30}$/.test(inId.value.trim());
+        setErr('id', ok ? '' : true); return ok;
+      }
+      function checkRole() { var ok = !!inRole.value; setErr('role', ok ? '' : true); return ok; }
+      function checkFoto() {
+        var f = inFoto.files[0];
+        if (!f) { setErr('foto', 'Unggah screenshot profil Wibuku.'); return false; }
+        if (TIPE.indexOf(f.type) < 0) { setErr('foto', 'Format tidak didukung. Gunakan JPG, PNG, GIF, atau WebP.'); return false; }
+        if (f.size > MAX) { setErr('foto', 'Ukuran ' + fmt(f.size) + ' melebihi batas 2 MB.'); return false; }
+        setErr('foto', ''); return true;
+      }
+
+      function showPreview() {
+        var f = inFoto.files[0];
+        if (previewUrl) { URL.revokeObjectURL(previewUrl); previewUrl = null; }
+        if (f && TIPE.indexOf(f.type) >= 0) {
+          previewUrl = URL.createObjectURL(f);
+          $('thumb').src = previewUrl; $('fname').textContent = f.name; $('fsize').textContent = fmt(f.size);
+          $('f-foto').classList.add('has-file');
+        } else { $('f-foto').classList.remove('has-file'); }
+      }
+      function clearFoto() { inFoto.value = ''; showPreview(); }
+
+      inFoto.addEventListener('change', function () { showPreview(); checkFoto(); });
+      $('ganti').addEventListener('click', function () { clearFoto(); inFoto.click(); });
+
+      var drop = $('drop');
+      ['dragenter', 'dragover'].forEach(function (n) { drop.addEventListener(n, function (e) { e.preventDefault(); drop.classList.add('over'); }); });
+      ['dragleave', 'drop'].forEach(function (n) { drop.addEventListener(n, function (e) { e.preventDefault(); drop.classList.remove('over'); }); });
+      drop.addEventListener('drop', function (e) {
+        var f = e.dataTransfer && e.dataTransfer.files[0];
+        if (!f) return;
+        try { var dt = new DataTransfer(); dt.items.add(f); inFoto.files = dt.files; } catch (x) { return; }
+        showPreview(); checkFoto();
+      });
+
+      inId.addEventListener('blur', checkId);
+      inId.addEventListener('input', function () { if ($('f-id').classList.contains('invalid')) checkId(); });
+      inRole.addEventListener('change', checkRole);
+
+      function setLoading(on) {
+        sending = on; btn.disabled = on;
+        card.classList.toggle('loading', on);
+        btn.classList.toggle('loading', on);
+        btnText.textContent = on ? 'Menyimpan data...' : 'Kirim pendaftaran';
+      }
+
+      /* Kirim ke Apps Script.
+         Content-Type "text/plain" sengaja dipakai agar browser menganggapnya
+         "simple request" dan TIDAK melakukan preflight (OPTIONS) yang tidak
+         didukung Apps Script. Isinya tetap JSON. */
+      function kirim(payload) {
+        var ctrl = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+        var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, TIMEOUT_MS) : null;
+        var opsi = {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+          redirect: 'follow'
+        };
+        if (ctrl) opsi.signal = ctrl.signal;
+
+        return fetch(API_URL, opsi)
+          .then(function (r) { return r.text(); })
+          .then(function (txt) {
+            if (timer) clearTimeout(timer);
+            try { return JSON.parse(txt); }
+            catch (x) {
+              throw new Error('FORMAT');
+            }
+          })
+          .catch(function (err) {
+            if (timer) clearTimeout(timer);
+            throw err;
+          });
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        if (sending) return;
+        hideAlert();
+        var a = checkId(), b = checkRole(), c = checkFoto();
+        if (!(a && b && c)) {
+          (!a ? inId : !b ? inRole : inFoto.closest('.field')).scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
+        if (!/^https:\/\/script\.google\.com\/macros\/s\/[^\s]+\/exec$/.test(API_URL)) {
+          showAlert('Alamat server belum diatur. Isi API_URL di index.html dengan URL Web App Apps Script.');
+          return;
+        }
+        setLoading(true);
+
+        var idVal = inId.value.trim(), roleVal = inRole.value, file = inFoto.files[0];
+        var reader = new FileReader();
+        reader.onerror = function () { setLoading(false); showAlert('Foto tidak dapat dibaca. Pilih ulang gambar.'); };
+        reader.onload = function (ev) {
+          kirim({ id: idVal, role: roleVal, fotoData: ev.target.result })
+            .then(function (res) {
+              if (res && res.status === 'sukses') { berhasil(res); }
+              else {
+                setLoading(false);
+                showAlert((res && res.message) || 'Pendaftaran gagal. Silakan coba lagi.');
+              }
+            })
+            .catch(function (err) {
+              setLoading(false);
+              if (err && err.message === 'FORMAT') {
+                showAlert('Server memberi jawaban tak terduga. Pastikan Web App di-deploy dengan akses "Anyone" dan URL-nya benar.');
+              } else if (err && err.name === 'AbortError') {
+                showAlert('Server terlalu lama menjawab. Coba lagi sebentar lagi.');
+              } else {
+                showAlert('Koneksi bermasalah. Periksa internet lalu coba lagi.');
+              }
+              if (window.console) console.error(err);
+            });
+        };
+        reader.readAsDataURL(file);
+      });
+
+      function berhasil(res) {
+        var link = String(res.waLink || '');
+        var aman = link.indexOf('https://wa.me/') === 0;
+        var wa = $('waBtn');
+        if (aman) { wa.href = link; wa.style.display = 'flex'; } else { wa.style.display = 'none'; }
+        form.reset(); clearFoto();
+        ['id', 'role', 'foto'].forEach(function (k) { setErr(k, ''); });
+        setLoading(false);
+        card.classList.add('done');
+        if (aman) { try { window.open(link, '_blank', 'noopener'); } catch (x) { /* tombol tetap tersedia */ } }
+      }
+
+      $('again').addEventListener('click', function () { card.classList.remove('done'); hideAlert(); inId.focus(); });
+    })();
+  </script>
+</body>
+</html>
