@@ -11,4 +11,4 @@
   Jika logo.js tidak diisi, website tetap jalan; hanya logo di header
   yang tidak tampil.
 */
-var LOGO_URL = '';
+var LOGO_URL = 'https://kaiijust01.github.io/senpai-clan/logo.png';
